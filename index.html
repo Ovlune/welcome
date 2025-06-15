@@ -169,18 +169,21 @@
       100% { box-shadow: 0 0 12px rgba(255,255,255,0.2); filter: brightness(1); }
     }
 
+    /* 📱 iPhone SE / 超窄屏优化 */
     @media (max-width: 375px) {
       h1.title { font-size: 28px; letter-spacing: 2px; }
       .slogan, #slogan-final { font-size: 0.95rem; padding: 0 1rem; max-width: 95vw; }
       .enter-btn { font-size: 15px; padding: 12px 24px; }
     }
 
+    /* 📖 折叠屏横屏优化 */
     @media (min-width: 768px) and (max-width: 899px) {
       h1.title { font-size: 4.5rem; }
       .slogan, #slogan-final { font-size: 1.4rem; max-width: 80%; }
       .enter-btn { font-size: 18px; padding: 18px 40px; }
     }
 
+    /* 🖥️ 超宽桌面屏优化 */
     @media (min-width: 1600px) {
       h1.title { font-size: 10rem; letter-spacing: 12px; }
       .slogan, #slogan-final { font-size: 2rem; max-width: 60vw; }
@@ -205,12 +208,6 @@
 <a class="enter-btn" href="#" onclick="handleEnter()">Enter Universe</a>
 
 <script>
-  // ✅ 如果不是第一次访问，则直接跳转主站
-  if (localStorage.getItem('ovlune_visited') === 'true') {
-    window.location.href = "https://www.ovlune.com";
-  }
-
-  // 🌌 星空背景逻辑
   const canvas = document.getElementById('stars');
   const ctx = canvas.getContext('2d');
   let w = canvas.width = window.innerWidth;
@@ -251,7 +248,6 @@
     h = canvas.height = window.innerHeight;
   });
 
-  // ⌨️ slogan 打字效果
   const text = "The far side of the moon is another universe.";
   const container = document.getElementById("typewriter");
 
@@ -268,17 +264,12 @@
     document.getElementById("slogan-final").style.opacity = "1";
   }, text.length * 90 + 1000);
 
-  // 🚪 按钮点击跳转
   function handleEnter() {
     const btn = document.querySelector('.enter-btn');
     btn.classList.add('flash');
     btn.textContent = 'Entering...';
     btn.style.pointerEvents = 'none';
     document.body.classList.add('fade-out');
-
-    // 设置访问记录
-    localStorage.setItem('ovlune_visited', 'true');
-
     setTimeout(() => {
       window.location.href = "https://www.ovlune.com";
     }, 800);
