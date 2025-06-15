@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Welcome to Ovlune</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #080808;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    h1.title {
+      font-size: 128px;
+      letter-spacing: 10px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+      animation: fadeIn 2s ease;
+      font-family: 'Allura','Great Vibes','Playfair Display','Cinzel', 'Cormorant Garamond', 'Oranienbaum';
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(1.05); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .halo-bg {
+      position: absolute;
+      width: 720px;
+      height: 720px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.08), transparent 70%);
+      filter: blur(20px);
+      z-index: 0;
+    }
+
+    img {
+      width: 600px;
+      max-width: 80vw;
+      margin-bottom: 30px;
+      animation: fadeIn 2s ease;
+    }
+
+    .slogan-container {
+      position: relative;
+      height: 2.4rem;
+      margin-bottom: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .slogan, #slogan-final {
+      position: absolute;
+      font-size: 1.2rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-align: center;
+      white-space: nowrap;
+      transition: opacity 1.2s ease;
+    }
+
+    .slogan span {
+      opacity: 0;
+      display: inline-block;
+      transform: scale(1.2) rotateX(90deg);
+      color: #ffffff;
+      text-shadow: 0 0 4px #ffffff,
+                   0 0 8px #cccccc,
+                   0 0 10px #999999;
+      animation: mysticAppear 0.7s ease-out forwards;
+    }
+
+    @keyframes mysticAppear {
+      0% {
+        opacity: 0;
+        transform: scale(1.5) rotateX(90deg);
+        filter: blur(4px);
+      }
+      60% {
+        opacity: 1;
+        transform: scale(1) rotateX(0);
+        filter: blur(0);
+      }
+      100% {
+        transform: scale(1.05);
+      }
+    }
+
+    #slogan-final {
+      opacity: 0;
+      color: #ffffff;
+    }
+
+    .enter-btn {
+      padding: 12px 26px;
+      border: 1px solid #fff;
+      color: #fff;
+      background-color: #000;
+      text-decoration: none;
+      font-size: 14px;
+      border-radius: 0;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    .enter-btn:hover {
+      background-color: #fff;
+      color: #000;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 600px) {
+      h1.title {
+        font-size: 36px;
+      }
+      img {
+        max-width: 300px;
+        width: 80%;
+      }
+      .slogan, #slogan-final {
+        font-size: 1rem;
+      }
+      .slogan-container {
+        height: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<!-- 光晕与 LOGO -->
+<div class="halo-bg"></div>
+<img alt="Ovlune Logo" src="output_non_black.png"/>
+
+<!-- 标题 -->
+<h1 class="title">OVLUNE</h1>
+
+<!-- slogan 打字 + 静态展示（相同位置） -->
+<div class="slogan-container">
+  <div class="slogan" id="typewriter"></div>
+  <div id="slogan-final">The far side of the moon is another universe</div>
+</div>
+
+<!-- 按钮 -->
+<a class="enter-btn" href="https://www.ovlune.com">Enter Universe</a>
+
+<!-- 星星背景 + 打字机动效脚本 -->
+<script>
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let w = canvas.width = window.innerWidth;
+  let h = canvas.height = window.innerHeight;
+
+  let stars = [];
+  for (let i = 0; i < 120; i++) {
+    stars.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 1.5,
+      d: Math.random() * 0.5
+    });
+  }
+
+  function drawStars() {
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = "rgba(255,255,255,0.8)";
+    for (let i = 0; i < stars.length; i++) {
+      const s = stars[i];
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    moveStars();
+    requestAnimationFrame(drawStars);
+  }
+
+  function moveStars() {
+    for (let i = 0; i < stars.length; i++) {
+      let s = stars[i];
+      s.y += s.d;
+      if (s.y > h) {
+        s.y = 0;
+        s.x = Math.random() * w;
+      }
+    }
+  }
+
+  drawStars();
+  window.addEventListener('resize', () => {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  });
+
+  // 打字机效果
+  const text = "The far side of the moon is another universe";
+  const container = document.getElementById("typewriter");
+
+  text.split("").forEach((char, i) => {
+    const span = document.createElement("span");
+    span.textContent = char;
+    span.style.animationDelay = `${i * 90}ms`;
+    container.appendChild(span);
+  });
+
+  // 替换为静态 slogan
+  setTimeout(() => {
+    const typewriter = document.getElementById("typewriter");
+    const final = document.getElementById("slogan-final");
+
+    typewriter.style.display = "none";
+    final.style.opacity = "1";
+  }, text.length * 90 + 1000);
+</script>
+
+</body>
+</html>
