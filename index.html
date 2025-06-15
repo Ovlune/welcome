@@ -40,8 +40,8 @@
     }
 
     h1.title {
-      font-size: 128px;
-      letter-spacing: 10px;
+      font-size: clamp(2.2rem, 8vw, 8rem);
+      letter-spacing: 0.4em;
       margin-bottom: 20px;
       text-transform: uppercase;
       color: #ffffff;
@@ -66,29 +66,35 @@
     }
 
     img {
-      width: 600px;
-      max-width: 80vw;
+      width: clamp(200px, 40vw, 600px);
+      max-width: 90vw;
       height: auto;
       margin-bottom: 30px;
       animation: fadeIn 2s ease;
     }
 
     .slogan-container {
-      position: relative;
-      height: 2.4rem;
+      min-height: 2.4rem;
       margin-bottom: 40px;
       display: flex;
       justify-content: center;
       align-items: center;
+      line-height: 1.4;
+      padding: 0 1rem;
+      text-align: center;
+      flex-wrap: wrap;
     }
 
     .slogan, #slogan-final {
       position: absolute;
-      font-size: 1.2rem;
+      font-size: clamp(1rem, 2.8vw, 1.8rem);
       font-weight: bold;
       letter-spacing: 1px;
+      line-height: 1.5;
+      max-width: 90vw;
       text-align: center;
-      white-space: nowrap;
+      white-space: normal;
+      word-break: keep-all;
       transition: opacity 1.2s ease;
     }
 
@@ -163,43 +169,42 @@
       100% { box-shadow: 0 0 12px rgba(255,255,255,0.2); filter: brightness(1); }
     }
 
-    @media (max-width: 600px) {
-      h1.title {
-        font-size: 36px;
-        letter-spacing: 3px;
-      }
-      img {
-        max-width: 300px;
-        width: 80%;
-      }
-      .slogan, #slogan-final {
-        font-size: 1rem;
-      }
-      .slogan-container {
-        height: 2rem;
-      }
-      .enter-btn {
-        font-size: 16px;
-        padding: 14px 32px;
-      }
+    /* 📱 iPhone SE / 超窄屏优化 */
+    @media (max-width: 375px) {
+      h1.title { font-size: 28px; letter-spacing: 2px; }
+      .slogan, #slogan-final { font-size: 0.95rem; padding: 0 1rem; max-width: 95vw; }
+      .enter-btn { font-size: 15px; padding: 12px 24px; }
+    }
+
+    /* 📖 折叠屏横屏优化 */
+    @media (min-width: 768px) and (max-width: 899px) {
+      h1.title { font-size: 4.5rem; }
+      .slogan, #slogan-final { font-size: 1.4rem; max-width: 80%; }
+      .enter-btn { font-size: 18px; padding: 18px 40px; }
+    }
+
+    /* 🖥️ 超宽桌面屏优化 */
+    @media (min-width: 1600px) {
+      h1.title { font-size: 10rem; letter-spacing: 12px; }
+      .slogan, #slogan-final { font-size: 2rem; max-width: 60vw; }
+      .enter-btn { font-size: 20px; padding: 20px 48px; }
+      .halo-bg { width: 1000px; height: 1000px; }
+      img { max-width: 700px; }
     }
   </style>
 </head>
 <body>
 
 <canvas id="stars"></canvas>
-
 <div class="halo-bg"></div>
-<img alt="Ovlune Logo" loading="lazy" src="output_non_black.png"/>
-
+<img alt="Ovlune Logo" loading="lazy" src="welcome.png"/>
 <h1 class="title">OVLUNE</h1>
 
 <div class="slogan-container">
   <div class="slogan" id="typewriter"></div>
-  <div id="slogan-final">The far side of the moon is another universe</div>
+  <div id="slogan-final">The far side of the moon is another universe.</div>
 </div>
 
-<!-- 优化后按钮：点击触发 JS 控制跳转 -->
 <a class="enter-btn" href="#" onclick="handleEnter()">Enter Universe</a>
 
 <script>
@@ -210,12 +215,7 @@
 
   let stars = [];
   for (let i = 0; i < 120; i++) {
-    stars.push({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      r: Math.random() * 1.5,
-      d: Math.random() * 0.5
-    });
+    stars.push({ x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.5, d: Math.random() * 0.5 });
   }
 
   function drawStars() {
@@ -248,8 +248,7 @@
     h = canvas.height = window.innerHeight;
   });
 
-  // slogan 打字机动画
-  const text = "The far side of the moon is another universe";
+  const text = "The far side of the moon is another universe.";
   const container = document.getElementById("typewriter");
 
   text.split("").forEach((char, i) => {
@@ -265,7 +264,6 @@
     document.getElementById("slogan-final").style.opacity = "1";
   }, text.length * 90 + 1000);
 
-  // 按钮点击处理
   function handleEnter() {
     const btn = document.querySelector('.enter-btn');
     btn.classList.add('flash');
